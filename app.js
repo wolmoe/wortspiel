@@ -34,7 +34,7 @@ for (let i = 0; i < numTurns; i++) {
     wordGrid.append(row);
 }
 
-const gameVersion = '1.'
+const wordListVersion = '1.5.1';
 const tiles = document.querySelectorAll('.letter');
 const rows = document.querySelectorAll('.row');
 const keys = document.querySelectorAll('.letter-key');
@@ -65,6 +65,11 @@ let currentCol = 0;
 
 // Functions
 const setupGame = () => {
+    if (localStorage.getItem('wordListVersion') !== wordListVersion) {
+        resetStorage();
+        localStorage.setItem('wordListVersion', wordListVersion);
+    }
+
     // clear all letter divs, enable keys, remove alerts
     for (let tile of tiles) {
         tile.innerText = "";
@@ -175,11 +180,15 @@ const gameOver = (result = 'lose') => {
     }
 };
 
-const resetGame = () => {
+const resetStorage =  () => {
     remainingWords = wordList.slice();
     playedWords = [];
     triedLetters = [];
     localStorage.clear();
+}
+
+const resetGame = () => {
+    resetStorage();
     restartButton.removeEventListener('click', resetGame);
     restartButton.addEventListener('click', setupGame);
     setupGame();
