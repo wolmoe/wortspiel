@@ -1,7 +1,5 @@
 html, body {
-    height: 100vh;
     margin: 0;
-    overflow: hidden;
 }
 
 body {
@@ -11,45 +9,26 @@ body {
     color: white;
 }
 
-.supsub {
-    display: inline-flex;
-    flex-direction: column;
-    justify-content: space-between;
-    vertical-align: middle;
-    text-align: left;
-    font-size: 70%;
-}
-
-.container {
-    max-width: 500px;
-    height: 100vh;
-    max-height: 100vh;
-    margin: auto;
+.top-header {
+    height: 2.5em;
     display: flex;
-    flex-direction: column;
-}
-
-.wordGrid {
-    height: 20%;
-}
-
-.row {
-    margin: 5px auto;
-    display: flex;
-    justify-content:center;
     align-items: center;
-}
-
-#alertRestart {
-    height: 40px;
-    display: flex;
-    align-items:center;
     justify-content: space-between;
-    margin: 5px;
+    margin: 0 8px;
 }
 
-#restart {
-    height: 100%;
+.header-button {
+    height: 35px;
+    aspect-ratio: 1/1;
+    color: white;
+    background: none;
+    border: none;
+    cursor: pointer;    
+}
+
+h1 {
+    font-size: 24px;
+    margin: 0;
 }
 
 .alerts {
@@ -58,34 +37,66 @@ body {
     display: flex;
     align-items: center;
     border-radius: 5px;
-    padding: 10px 20px;
 }
 
 .alert {
     background-color: #5e56a5;
+    padding: 10px 20px;
+    height: 80%;
 }
 
-.alert button {
-    background-color: #7d7d7d;
-    color: white;
+hr {
     border: none;
+    height: 1px;
+    background-color: gray;
+    margin: 0;
+    margin-bottom: 5px;
+}
+
+.container {
+    max-width: 500px;
+    width: 100%;
+    height: 100vh; /* Fallback for browsers that do not support Custom Properties */
+    height: calc(var(--vh, 1vh) * 100); /* Adapt to mobile screens */
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+#wordGridContainer {
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    flex-grow: 1;
+    overflow: hidden;
+}
+
+#wordGrid {
+    width: 320px;
+    display: grid;
+    grid-template-rows: repeat(6, 1fr);
+    grid-gap: 5px;
     padding: 10px;
-    border-radius: 5px;
-    margin-left: 10px;
-    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-gap: 5px
 }
 
 .letter {
-    width: 1.2em;
-    height: 1.2em;
-    margin: 0 5px;
+    height: 1.5em;
+    aspect-ratio: 1/1;
     border: 1px solid gray;
     background-color: none;
     color: white;
-    font-size: 2em;
-    font-family: sans-serif;
+    font-size: 2.2rem;
+    line-height: 2.2rem;
     font-weight: bold;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
 }
@@ -93,17 +104,18 @@ body {
 .keyboard {
     display: flex;
     flex-direction: column;
-    flex: 1;
+    margin: 0 8px;
 }
 
 .keyrow {
-    margin: 5px;
+    width: 100%;
+    margin: 0 auto 8px;
     justify-content: space-between;
     display: flex;
 }
 
 .keyrow:nth-of-type(2) {
-    justify-content: space-evenly;
+    justify-content: space-around;
 }
 
 .key {
@@ -114,6 +126,9 @@ body {
     background-color: #7d7d7d;
     cursor: pointer;
     height: 4em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .letter-key {
@@ -145,22 +160,4 @@ body {
 .correct {
     background-color: #538d4e;
     border: 1px solid #538d4e;
-}
-
-@media (min-width: 720px) {
-    .letter-key {
-        max-width: 3em;
-        flex-grow: 1;
-    }
-
-    .key-large {
-        flex-grow: 3;
-        max-width: 6em;
-    }
-
-    .letter {
-        width: 1.5em;
-        height: 1.5em;
-        font-size: 2.2em;
-    }
 }

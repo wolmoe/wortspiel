@@ -1,22 +1,34 @@
 import { wordList } from './words.js';
 
+// const wordList = ['NUDEL'];
+
 const letters = document.querySelectorAll('.letter');
 const rows = document.querySelectorAll('.row');
 const keys = document.querySelectorAll('.letter-key');
 const enterKey = document.querySelector('#enter');
 const backspaceKey = document.querySelector('#backspace');
-const restartKey = document.querySelector('#restart');
+const restartButton = document.querySelector('#restart');
 const alertContainer = document.querySelector('.alerts');
 
 // To Do:
 // Prüfen, ob Sieg auf letzten Zug beim letzten Wort des Arrays den richtigen Alert auslöst
+// Reload der Seite löscht das Wort und zieht automatisch ein neues. Idee:
+    // push solution to localStorage.
+    // on page load check if solution is filled.
+    // If solution, use the current wordList
+    // else take new one from remainingWords
 
-// Weiter Ideen: 
-// remaining Words in localStorage/Cookie speichern, um später fortzusetzen
-// local Storage/Cookies für Statistiken nutzen
+// Weitere Ideen: 
+// local Storage für Statistiken nutzen
+
+// CSS Calculations
+let vh = window.innerHeight * 0.01;
+document.documentElement.style.setProperty('--vh', `${vh}px`);
 
 // Basic game variables
-let remainingWords = wordList.slice();
+let remainingWords = localStorage.getItem('remainingWords')
+    ? JSON.parse(localStorage.getItem('remainingWords'))
+    : wordList.slice();
 let playedWords = [];
 let triedLetters = [];
 let currentLetters = [];
@@ -40,7 +52,7 @@ const setupGame = () => {
     }
     enterKey.disabled = false;
     backspaceKey.disabled = false;
-    alertContainer.innerHTML = "";
+    alertContainer.innerHTML = '<h1>Wolfgangs Wortspiel</h1>';
     alertContainer.classList.remove('alert');
     isGameOver = false;
     isGameWon = false;
@@ -50,10 +62,14 @@ const setupGame = () => {
 
 
     // If remaining words array still contains words, randomly pick one
-    if (remainingWords.length > 0) {
+    if (remainingWords.length > 0 && !localStorage.getItem('solution')) {
         let rand = Math.floor(Math.random() * remainingWords.length);
         solution = remainingWords[rand];
+        localStorage.setItem('solution', JSON.stringify(solution));
         remainingWords.splice(rand, 1);
+        localStorage.setItem('remainingWords', JSON.stringify(remainingWords));
+    } else if (remainingWords.length > 0 && localStorage.getItem('solution')) {
+        solution = JSON.parse(localStorage.getItem('solution'));
     } else {
         alertMsg('playThrough');
     }
@@ -124,6 +140,7 @@ const gameOver = (result = 'lose') => {
     }
     enterKey.disabled = true;
     backspaceKey.disabled = true;
+    localStorage.removeItem('solution');
     if (remainingWords.length === 0) {
         alertMsg('playThrough');
     } else if (result === 'win') {
@@ -134,9 +151,13 @@ const gameOver = (result = 'lose') => {
 };
 
 const resetGame = () => {
-    remainingWords = allWords.slice();
+    remainingWords = wordList.slice();
     playedWords = [];
     triedLetters = [];
+    restartButton.innerText = 'NEUES SPIEL';
+    localStorage.clear();
+    restartButton.removeEventListener('click', resetGame);
+    restartButton.addEventListener('click', setupGame);
     setupGame();
 };
 
@@ -144,7 +165,10 @@ const alertMsg = (msg = 'lose') => {
     if (msg === 'win') {
         alertContainer.innerHTML = `Geschafft, ${solution} ist richtig!`;
     } else if (msg === 'playThrough') {
-        alertContainer.innerHTML = 'Gratulation, du hast alle Wörter gespielt! <button id="reset" onclick="resetGame()">Reset?</button>';
+        alertContainer.innerText = 'Gratulation, du hast alle Wörter gespielt!';
+        restartButton.innerText = 'RESET';
+        restartButton.removeEventListener('click', setupGame);
+        restartButton.addEventListener('click', resetGame);
     } else if (msg === 'wrongWord') {
         alertContainer.innerText = 'Wort nicht in Wortliste.';
     } else {
@@ -167,14 +191,14 @@ for (let key of keys) {
 
 enterKey.addEventListener('click', endTurn);
 
-restartKey.addEventListener('click', setupGame);
+restartButton.addEventListener('click', setupGame);
 
 backspaceKey.addEventListener('click', () => {
     if (currentCol > 0) {
         currentLetters.pop();
         currentCol--;
         rows[currentRow].children[currentCol].innerText = "";
-        alertContainer.innerHTML = '';
+        alertContainer.innerHTML = '<h1>Wolfgangs Wortspiel</h1>';
         alertContainer.classList.remove('alert');
     }
 
