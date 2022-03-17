@@ -1,25 +1,47 @@
 import { wordList } from './words.js';
 
+// backup array for testing
 // const wordList = ['NUDEL'];
 
-const letters = document.querySelectorAll('.letter');
+// set game size
+let wordLength = 5;
+let numTurns = 6;
+
+// generate letter tile grid
+const wordGrid = document.querySelector('#wordGrid');
+for (let i = 0; i < numTurns; i++) {
+    const row = document.createElement('div');
+    row.classList.add('row');
+    row.setAttribute('data-row', i)
+    for (let j = 0; j < wordLength; j++) {
+        const tile = document.createElement('div');
+        tile.classList.add('letter');
+        tile.setAttribute('id', `tile-${i}-${j}`);
+        tile.setAttribute('data-row', i);
+        tile.setAttribute('data-column', j);
+        tile.addEventListener('click', () => {
+            if (currentRow === i && !isGameWon) {
+                currentTile = document.querySelector(`#tile-${i}-${j}`);
+                for (let tile of tiles) {
+                    tile.classList.remove('active');
+                }
+                currentTile.classList.add('active');
+                currentCol = j;
+            }
+        })
+        row.append(tile);
+    }
+    wordGrid.append(row);
+}
+
+const gameVersion = '1.'
+const tiles = document.querySelectorAll('.letter');
 const rows = document.querySelectorAll('.row');
 const keys = document.querySelectorAll('.letter-key');
 const enterKey = document.querySelector('#enter');
 const backspaceKey = document.querySelector('#backspace');
 const restartButton = document.querySelector('#restart');
 const alertContainer = document.querySelector('.alerts');
-
-// To Do:
-// Prüfen, ob Sieg auf letzten Zug beim letzten Wort des Arrays den richtigen Alert auslöst
-// Reload der Seite löscht das Wort und zieht automatisch ein neues. Idee:
-    // push solution to localStorage.
-    // on page load check if solution is filled.
-    // If solution, use the current wordList
-    // else take new one from remainingWords
-
-// Weitere Ideen: 
-// local Storage für Statistiken nutzen
 
 // CSS Calculations
 let vh = window.innerHeight * 0.01;
@@ -31,10 +53,12 @@ let remainingWords = localStorage.getItem('remainingWords')
     : wordList.slice();
 let playedWords = [];
 let triedLetters = [];
-let currentLetters = [];
+let currentLetters = [...Array(wordLength)];
+let currentTile = "";
 let solution = "";
 let isGameOver = false;
 let isGameWon = false;
+let isAlert = false;
 let turn = 0;
 let currentRow = 0;
 let currentCol = 0;
@@ -42,9 +66,9 @@ let currentCol = 0;
 // Functions
 const setupGame = () => {
     // clear all letter divs, enable keys, remove alerts
-    for (let letter of letters) {
-        letter.innerText = "";
-        letter.classList.remove('used', 'correct', 'contained');
+    for (let tile of tiles) {
+        tile.innerText = "";
+        tile.classList.remove('used', 'correct', 'contained');
     }
     for (let key of keys) {
         key.disabled = false;
@@ -60,7 +84,6 @@ const setupGame = () => {
     currentRow = 0;
     currentCol = 0;
 
-
     // If remaining words array still contains words, randomly pick one
     if (remainingWords.length > 0 && !localStorage.getItem('solution')) {
         let rand = Math.floor(Math.random() * remainingWords.length);
@@ -73,14 +96,15 @@ const setupGame = () => {
     } else {
         alertMsg('playThrough');
     }
+    highlightActive();
 };
 
 const endTurn = () => {
-    if (currentLetters.length === 5 && wordList.includes(currentLetters.join(""))) {
+    if (currentLetters.length === wordLength && wordList.includes(currentLetters.join(""))) {
         let currentAttempt = [...solution];
 
         // first Loop: Search for correct letters
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < wordLength; i++) {
             if (currentAttempt[i] === currentLetters[i]) {
                 rows[currentRow].children[i].classList.add('correct');
                 for (let key of keys) {
@@ -93,7 +117,7 @@ const endTurn = () => {
         }
 
         // Second loop: Search for contained letters
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < wordLength; i++) {
             if (currentAttempt.includes(currentLetters[i])) {
                 rows[currentRow].children[i].classList.add('contained');
                 currentAttempt[currentAttempt.indexOf(currentLetters[i])] = "";
@@ -118,17 +142,18 @@ const endTurn = () => {
             triedLetters.push(letter);
         }
 
-        currentLetters = [];
+        currentLetters = [...Array(wordLength)];
         turn++;
-        if (turn > 5 && isGameWon) {
+        if (turn > wordLength && isGameWon) {
             isGameOver = true;
             gameOver('win');
-        } else if (turn > 5 && !isGameWon) {
+        } else if (turn > wordLength && !isGameWon) {
             isGameOver = true;
             gameOver('lose');
         }
         currentRow++;
         currentCol = 0;
+        highlightActive();
     } else {
         alertMsg('wrongWord');
     }
@@ -154,7 +179,6 @@ const resetGame = () => {
     remainingWords = wordList.slice();
     playedWords = [];
     triedLetters = [];
-    restartButton.innerText = 'NEUES SPIEL';
     localStorage.clear();
     restartButton.removeEventListener('click', resetGame);
     restartButton.addEventListener('click', setupGame);
@@ -166,7 +190,6 @@ const alertMsg = (msg = 'lose') => {
         alertContainer.innerHTML = `Geschafft, ${solution} ist richtig!`;
     } else if (msg === 'playThrough') {
         alertContainer.innerText = 'Gratulation, du hast alle Wörter gespielt!';
-        restartButton.innerText = 'RESET';
         restartButton.removeEventListener('click', setupGame);
         restartButton.addEventListener('click', resetGame);
     } else if (msg === 'wrongWord') {
@@ -175,34 +198,62 @@ const alertMsg = (msg = 'lose') => {
         alertContainer.innerHTML = `Oh je... Das Wort war ${solution}.`;
     }
     alertContainer.classList.add('alert');
+    isAlert = true;
 };
+
+const removeAlert = () => {
+    alertContainer.innerHTML = '<h1>Wolfgangs Wortspiel</h1>';
+    alertContainer.classList.remove('alert');
+    isAlert = false;
+}
+
+const highlightActive = (row = currentRow, col = currentCol) => {
+    for (let tile of tiles) {
+        tile.classList.remove('active');
+    }
+    if (!isGameWon) rows[row].children[col].classList.add('active');
+}
+
+function keyType() {
+    if (currentCol < wordLength) {
+        const attempt = this.innerText;
+        currentLetters[currentCol] = attempt;
+        rows[currentRow].children[currentCol].innerText = attempt;
+        while (currentCol < wordLength - 1 && rows[currentRow].children[currentCol].innerText) {
+            currentCol++
+        }
+        highlightActive()
+        if(isAlert) {
+            removeAlert();
+        }
+    }
+}
 
 // Event Listeners
 for (let key of keys) {
-    key.addEventListener('click', function () {
-        if (currentCol < 5) {
-            const attempt = this.innerText;
-            currentLetters.push(attempt);
-            rows[currentRow].children[currentCol].innerText = attempt;
-            currentCol++;
-        }
-    });
+    key.addEventListener('click', keyType);
 };
 
 enterKey.addEventListener('click', endTurn);
 
-restartButton.addEventListener('click', setupGame);
-
 backspaceKey.addEventListener('click', () => {
-    if (currentCol > 0) {
-        currentLetters.pop();
-        currentCol--;
-        rows[currentRow].children[currentCol].innerText = "";
-        alertContainer.innerHTML = '<h1>Wolfgangs Wortspiel</h1>';
-        alertContainer.classList.remove('alert');
+    if (currentCol >= 0 && currentCol <= wordLength) {
+        currentLetters[currentCol] = "";
+        if (currentCol === 0 || rows[currentRow].children[currentCol].innerText) {
+            rows[currentRow].children[currentCol].innerText = "";
+        } else {
+            currentCol--;
+            rows[currentRow].children[currentCol].innerText = "";
+        }
+        if(isAlert) {
+            removeAlert();
+        }
+        highlightActive();
     }
 
 });
+
+restartButton.addEventListener('click', setupGame);
 
 // Initialize Game
 setupGame();

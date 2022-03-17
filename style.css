@@ -69,7 +69,7 @@ hr {
     justify-content: center;
     align-items: start;
     flex-grow: 1;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 
 #wordGrid {
@@ -99,6 +99,10 @@ hr {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+}
+
+.active {
+    border-color: white;
 }
 
 .keyboard {
