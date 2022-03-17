@@ -1,0 +1,156 @@
+html, body {
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
+}
+
+body {
+    background-color: #222;
+    text-align: center;
+    font-family: sans-serif;
+    color: white;
+}
+
+.supsub {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: space-between;
+    vertical-align: middle;
+    text-align: left;
+    font-size: 70%;
+}
+
+.container {
+    max-width: 500px;
+    height: 100vh;
+    max-height: 100vh;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.wordGrid {
+    height: 20%;
+}
+
+.row {
+    margin: 5px auto;
+    display: flex;
+    justify-content:center;
+    align-items: center;
+}
+
+#alerts {
+    height: 2em;
+    display: flex;
+    align-items:center;
+    justify-content: center;
+    max-width: 400px;
+    border-radius: 5px;
+    padding: 10px 20px;
+    margin: 10px auto;
+}
+
+.alert {
+    background-color: #5e56a5;
+}
+
+.alert button {
+    background-color: #7d7d7d;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.letter {
+    width: 1.2em;
+    height: 1.2em;
+    margin: 0 5px;
+    border: 1px solid gray;
+    background-color: none;
+    color: white;
+    font-size: 2em;
+    font-family: sans-serif;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.keyboard {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.keyrow {
+    margin: 5px;
+    justify-content: space-between;
+    display: flex;
+}
+
+.keyrow:nth-of-type(2) {
+    justify-content: space-evenly;
+}
+
+.key {
+    color: white;
+    font-weight: bold;
+    border-radius: 5px;
+    border: 1px solid #7d7d7d;
+    background-color: #7d7d7d;
+    cursor: pointer;
+    height: 4em;
+}
+
+.letter-key {
+    max-width: 3em;
+    flex-grow: 1;
+    margin: 0 1px;
+}
+
+.key-large {
+    max-width: 6em;
+    flex-grow: 2;
+    margin: 0 1px;
+}
+
+.key:active {
+    background-color:rgb(100, 100, 100);
+}
+
+.used {
+    background-color:#3c3c3c;
+    border: 1px solid #3c3c3c;
+}
+
+.contained {
+    background-color: #b59f3b;
+    border: 1px solid #b59f3b;
+}
+
+.correct {
+    background-color: #538d4e;
+    border: 1px solid #538d4e;
+}
+
+@media (min-width: 720px) {
+    .letter-key {
+        max-width: 3em;
+        flex-grow: 1;
+    }
+
+    .key-large {
+        flex-grow: 3;
+        max-width: 6em;
+    }
+
+    .letter {
+        width: 1.5em;
+        height: 1.5em;
+        font-size: 2.2em;
+    }
+}
