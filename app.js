@@ -1,22 +1,22 @@
-const allWords = ['ERNST', 'NUDEL', 'GEHEN', 'VOGEL', 'QUARZ', 'ABEND', 'ABGAS', 'LEBEN', 'REISE', 'BRUST', 'LOGIK', 'WURST', 'HINDU', 'NEBEL', 'SUBBR', 'BREZG', 'BASIS', 'BOHNE', 'PROST', 'PUDEL', 'CLOWN', 'REGEN', 'WEICH', 'MURKS'];
+import { wordList } from './words.js';
+
 const letters = document.querySelectorAll('.letter');
 const rows = document.querySelectorAll('.row');
 const keys = document.querySelectorAll('.letter-key');
 const enterKey = document.querySelector('#enter');
 const backspaceKey = document.querySelector('#backspace');
-const alertContainer = document.querySelector('#alerts');
-const resetButton = document.querySelector('#reset');
+const restartKey = document.querySelector('#restart');
+const alertContainer = document.querySelector('.alerts');
 
 // To Do:
 // Prüfen, ob Sieg auf letzten Zug beim letzten Wort des Arrays den richtigen Alert auslöst
-// Eingabe auf gültige Wörter überprüfen (geht erst mit größerem Wort-Array), Quatsch-Wörter mit roter Umrandung markieren
 
-// future development ideas: 
-//store played words in localStorage/Cookie
-// maybe request words from Wordnik API (German equivalent?) https://developer.wordnik.com/gettingstarted
+// Weiter Ideen: 
+// remaining Words in localStorage/Cookie speichern, um später fortzusetzen
+// local Storage/Cookies für Statistiken nutzen
 
 // Basic game variables
-let remainingWords = allWords.slice();
+let remainingWords = wordList.slice();
 let playedWords = [];
 let triedLetters = [];
 let currentLetters = [];
@@ -38,8 +38,10 @@ const setupGame = () => {
         key.disabled = false;
         key.classList.remove('used', 'correct', 'contained');
     }
-    alerts.innerHTML = "";
-    alerts.classList.remove('alert');
+    enterKey.disabled = false;
+    backspaceKey.disabled = false;
+    alertContainer.innerHTML = "";
+    alertContainer.classList.remove('alert');
     isGameOver = false;
     isGameWon = false;
     turn = 0;
@@ -55,10 +57,10 @@ const setupGame = () => {
     } else {
         alertMsg('playThrough');
     }
-}
+};
 
 const endTurn = () => {
-    if (currentLetters.length === 5) {
+    if (currentLetters.length === 5 && wordList.includes(currentLetters.join(""))) {
         let currentAttempt = [...solution];
 
         // first Loop: Search for correct letters
@@ -80,12 +82,12 @@ const endTurn = () => {
                 rows[currentRow].children[i].classList.add('contained');
                 currentAttempt[currentAttempt.indexOf(currentLetters[i])] = "";
                 for (let key of keys) {
-                    if (currentLetters[i] === key.innerText) key.classList.add('contained')
+                    if (currentLetters[i] === key.innerText) key.classList.add('contained');
                 }
             } else {
                 rows[currentRow].children[i].classList.add('used');
                 for (let key of keys) {
-                    if (currentLetters[i] === key.innerText) key.classList.add('used')
+                    if (currentLetters[i] === key.innerText) key.classList.add('used');
                 }
             }
         }
@@ -101,7 +103,7 @@ const endTurn = () => {
         }
 
         currentLetters = [];
-        turn++
+        turn++;
         if (turn > 5 && isGameWon) {
             isGameOver = true;
             gameOver('win');
@@ -111,13 +113,17 @@ const endTurn = () => {
         }
         currentRow++;
         currentCol = 0;
+    } else {
+        alertMsg('wrongWord');
     }
-}
+};
 
 const gameOver = (result = 'lose') => {
     for (let key of keys) {
         key.disabled = true;
     }
+    enterKey.disabled = true;
+    backspaceKey.disabled = true;
     if (remainingWords.length === 0) {
         alertMsg('playThrough');
     } else if (result === 'win') {
@@ -125,25 +131,27 @@ const gameOver = (result = 'lose') => {
     } else {
         alertMsg('lose');
     }
-}
+};
 
 const resetGame = () => {
     remainingWords = allWords.slice();
     playedWords = [];
     triedLetters = [];
     setupGame();
-}
+};
 
 const alertMsg = (msg = 'lose') => {
     if (msg === 'win') {
-        alerts.innerHTML = `Geschafft, ${solution} ist richtig! <button id="restart" onclick="setupGame()">Neues Spiel</button>`;
+        alertContainer.innerHTML = `Geschafft, ${solution} ist richtig!`;
     } else if (msg === 'playThrough') {
-        alerts.innerHTML = 'Gratulation, du hast alle Wörter gespielt! <button id="reset" onclick="resetGame()">Reset?</button>';
+        alertContainer.innerHTML = 'Gratulation, du hast alle Wörter gespielt! <button id="reset" onclick="resetGame()">Reset?</button>';
+    } else if (msg === 'wrongWord') {
+        alertContainer.innerText = 'Wort nicht in Wortliste.';
     } else {
-        alerts.innerHTML = `Oh je... Das Wort war ${solution}. <button id="restart" onclick="setupGame()">Neues Spiel</button>`;
+        alertContainer.innerHTML = `Oh je... Das Wort war ${solution}.`;
     }
-    alerts.classList.add('alert');
-}
+    alertContainer.classList.add('alert');
+};
 
 // Event Listeners
 for (let key of keys) {
@@ -155,15 +163,19 @@ for (let key of keys) {
             currentCol++;
         }
     });
-}
+};
 
 enterKey.addEventListener('click', endTurn);
+
+restartKey.addEventListener('click', setupGame);
 
 backspaceKey.addEventListener('click', () => {
     if (currentCol > 0) {
         currentLetters.pop();
-        currentCol--
+        currentCol--;
         rows[currentRow].children[currentCol].innerText = "";
+        alertContainer.innerHTML = '';
+        alertContainer.classList.remove('alert');
     }
 
 });
