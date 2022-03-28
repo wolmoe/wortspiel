@@ -34,7 +34,7 @@ for (let i = 0; i < numTurns; i++) {
     wordGrid.append(row);
 }
 
-const wordListVersion = '1.5.1';
+const wordListVersion = '1.6';
 const tiles = document.querySelectorAll('.letter');
 const rows = document.querySelectorAll('.row');
 const keys = document.querySelectorAll('.letter-key');
@@ -42,6 +42,75 @@ const enterKey = document.querySelector('#enter');
 const backspaceKey = document.querySelector('#backspace');
 const restartButton = document.querySelector('#restart');
 const alertContainer = document.querySelector('.alerts');
+const resetButton = document.querySelector('#reset');
+const version = document.querySelector('#version');
+version.innerHTML = wordListVersion;
+
+// Modal Handling
+const statsBtn = document.querySelector('#stats-btn');
+const howtoBtn = document.querySelector('#howto-btn');
+const settingsBtn = document.querySelector('#settings-btn');
+const statsModal = document.querySelector('#stats');
+const howtoModal = document.querySelector('#howto');
+const settingsModal = document.querySelector('#settings');
+const closeStats = document.querySelector('#closeStats');
+const closeHowto = document.querySelector('#closeHowto');
+const closeSettings = document.querySelector('#closeSettings');
+const statsNums = document.querySelectorAll('.statsNum');
+const statsDist = document.querySelector('#dist');
+
+statsBtn.addEventListener('click', () => statsModal.style.display = 'block');
+howtoBtn.addEventListener('click', () => howtoModal.style.display = 'block');
+settingsBtn.addEventListener('click', () => settingsModal.style.display = 'block');
+closeStats.addEventListener('click', () => statsModal.style.display = 'none');
+closeHowto.addEventListener('click', () => howtoModal.style.display = 'none');
+closeSettings.addEventListener('click', () => settingsModal.style.display = 'none');
+window.addEventListener('click', (e) => {
+    if (e.target === statsModal) {
+        statsModal.style.display = 'none';
+    }
+})
+
+let gameStats = localStorage.getItem('gameStats')
+    ? JSON.parse(localStorage.getItem('gameStats'))
+    : {
+        played: 0,
+        won: 0,
+        currStreak: 0,
+        maxStreak: 0,
+        solTurns: [0, 0, 0, 0, 0, 0]
+      };
+
+gameStats.solTurns.forEach((el, i) => {
+    const stat = document.createElement('div');
+    stat.innerHTML = `${i + 1}: <span class="statsDistFig">${el}</span>`;
+    statsDist.append(stat);
+})
+
+const statsDistFigs = document.querySelectorAll('.statsDistFig');
+
+const setStats = (res) => {
+    if (res === 'win') {
+        gameStats.played++;
+        gameStats.won++;
+        gameStats.currStreak++;
+        if (gameStats.currStreak > gameStats.maxStreak) {
+            gameStats.maxStreak = gameStats.currStreak;
+        }
+        gameStats.solTurns[turn]++;
+    } else if (res === 'lose') {
+        gameStats.played++;
+        gameStats.currStreak = 0;
+    }
+    statsNums[0].innerText = gameStats.played;
+    statsNums[1].innerText = `${Math.round(!gameStats.won ? 0 : gameStats.won / gameStats.played * 100)}%`;
+    statsNums[2].innerText = gameStats.currStreak;
+    statsNums[3].innerText = gameStats.maxStreak;
+    statsDistFigs.forEach((fig, i) => {
+        fig.innerText = gameStats.solTurns[i];
+    })
+    localStorage.setItem('gameStats', JSON.stringify(gameStats))
+}
 
 // CSS Calculations
 let vh = window.innerHeight * 0.01;
@@ -70,6 +139,7 @@ const setupGame = () => {
         localStorage.setItem('wordListVersion', wordListVersion);
     }
 
+
     // clear all letter divs, enable keys, remove alerts
     for (let tile of tiles) {
         tile.innerText = "";
@@ -88,6 +158,7 @@ const setupGame = () => {
     turn = 0;
     currentRow = 0;
     currentCol = 0;
+    setStats();
 
     // If remaining words array still contains words, randomly pick one
     if (remainingWords.length > 0 && !localStorage.getItem('solution')) {
@@ -139,6 +210,7 @@ const endTurn = () => {
         if (currentLetters.every((letter, i) => letter === [...solution][i])) {
             isGameWon = true;
             playedWords.push(solution);
+            setStats('win');
             gameOver('win');
         }
 
@@ -154,6 +226,7 @@ const endTurn = () => {
             gameOver('win');
         } else if (turn > wordLength && !isGameWon) {
             isGameOver = true;
+            setStats('lose');
             gameOver('lose');
         }
         currentRow++;
@@ -180,15 +253,24 @@ const gameOver = (result = 'lose') => {
     }
 };
 
-const resetStorage =  () => {
+const resetStorage = () => {
     remainingWords = wordList.slice();
     playedWords = [];
     triedLetters = [];
     localStorage.clear();
 }
 
+const resetStats = () => {
+    gameStats.played = 0;
+    gameStats.won = 0;
+    gameStats.currStreak = 0;
+    gameStats.maxStreak = 0;
+    gameStats.solTurns = [0, 0, 0, 0, 0, 0];
+}
+
 const resetGame = () => {
     resetStorage();
+    resetStats();
     restartButton.removeEventListener('click', resetGame);
     restartButton.addEventListener('click', setupGame);
     setupGame();
@@ -232,7 +314,7 @@ function keyType() {
             currentCol++
         }
         highlightActive()
-        if(isAlert) {
+        if (isAlert) {
             removeAlert();
         }
     }
@@ -254,7 +336,7 @@ backspaceKey.addEventListener('click', () => {
             currentCol--;
             rows[currentRow].children[currentCol].innerText = "";
         }
-        if(isAlert) {
+        if (isAlert) {
             removeAlert();
         }
         highlightActive();
@@ -263,6 +345,7 @@ backspaceKey.addEventListener('click', () => {
 });
 
 restartButton.addEventListener('click', setupGame);
+resetButton.addEventListener('click', resetGame);
 
 // Initialize Game
 setupGame();

@@ -14,66 +14,158 @@
     <div class="container">
         <header>
             <div class="top-header">
-                <button class="header-button" id="stats"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                        width="24" height="24">
-                        <path fill="none" d="M0 0h24v24H0z" />
-                        <path
-                            d="M2 13h6v8H2v-8zm14-5h6v13h-6V8zM9 3h6v18H9V3zM4 15v4h2v-4H4zm7-10v14h2V5h-2zm7 5v9h2v-9h-2z"
-                            fill="rgba(255,255,255,1)" />
-                    </svg></button>
+                <div class="btn-grp">
+                    <button class="header-button" id="stats-btn"><svg xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24" width="24" height="24">
+                            <path fill="none" d="M0 0h24v24H0z" />
+                            <path
+                                d="M2 13h6v8H2v-8zm14-5h6v13h-6V8zM9 3h6v18H9V3zM4 15v4h2v-4H4zm7-10v14h2V5h-2zm7 5v9h2v-9h-2z"
+                                fill="rgba(255,255,255,1)" />
+                        </svg></button>
+                    <button class="header-button" id="howto-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                            <path fill="none" d="M0 0h24v24H0z" />
+                            <path
+                                d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-1-5h2v2h-2v-2zm2-1.645V14h-2v-1.5a1 1 0 0 1 1-1 1.5 1.5 0 1 0-1.471-1.794l-1.962-.393A3.501 3.501 0 1 1 13 13.355z"
+                                fill="rgba(255,255,255,1)" />
+                        </svg>
+                    </button>
+                </div>
                 <div class="alerts"></div>
-                <button class="header-button" id="restart"><svg width="24" height="24" viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd">
-                        <path fill="#ffffff"
-                            d="M7 9h-7v-7h1v5.2c1.853-4.237 6.083-7.2 11-7.2 6.623 0 12 5.377 12 12s-5.377 12-12 12c-6.286 0-11.45-4.844-11.959-11h1.004c.506 5.603 5.221 10 10.955 10 6.071 0 11-4.929 11-11s-4.929-11-11-11c-4.66 0-8.647 2.904-10.249 7h5.249v1z" />
-                    </svg></button>
+                <div class="btn-grp">
+                    <button class="header-button" id="settings-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                            <path fill="#fff"
+                                d="M6 16h-6v-3h6v3zm-2-5v-10h-2v10h2zm-2 7v5h2v-5h-2zm13-7h-6v-3h6v3zm-2-5v-5h-2v5h2zm-2 7v10h2v-10h-2zm13 3h-6v-3h6v3zm-2-5v-10h-2v10h2zm-2 7v5h2v-5h-2z" />
+                        </svg>
+                    </button>
+                    <button class="header-button" id="restart"><svg width="24" height="24" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd">
+                            <path fill="#ffffff"
+                                d="M7 9h-7v-7h1v5.2c1.853-4.237 6.083-7.2 11-7.2 6.623 0 12 5.377 12 12s-5.377 12-12 12c-6.286 0-11.45-4.844-11.959-11h1.004c.506 5.603 5.221 10 10.955 10 6.071 0 11-4.929 11-11s-4.929-11-11-11c-4.66 0-8.647 2.904-10.249 7h5.249v1z" />
+                        </svg>
+                    </button>
+                </div>
             </div>
             <hr>
         </header>
-        <section id="wordGridContainer">
-            <div id="wordGrid"></div>
-        </section>
-        <section class="keyboard">
-            <div class="keyrow">
-                <button class="key letter-key">Q</button>
-                <button class="key letter-key">W</button>
-                <button class="key letter-key">E</button>
-                <button class="key letter-key">R</button>
-                <button class="key letter-key">T</button>
-                <button class="key letter-key">Z</button>
-                <button class="key letter-key">U</button>
-                <button class="key letter-key">I</button>
-                <button class="key letter-key">O</button>
-                <button class="key letter-key">P</button>
+        <main>
+            <section id="wordGridContainer">
+                <div id="wordGrid"></div>
+            </section>
+            <section class="keyboard">
+                <div class="keyrow">
+                    <button class="key letter-key">Q</button>
+                    <button class="key letter-key">W</button>
+                    <button class="key letter-key">E</button>
+                    <button class="key letter-key">R</button>
+                    <button class="key letter-key">T</button>
+                    <button class="key letter-key">Z</button>
+                    <button class="key letter-key">U</button>
+                    <button class="key letter-key">I</button>
+                    <button class="key letter-key">O</button>
+                    <button class="key letter-key">P</button>
+                </div>
+                <div class="keyrow">
+                    <div class="spacer"></div>
+                    <button class="key letter-key">A</button>
+                    <button class="key letter-key">S</button>
+                    <button class="key letter-key">D</button>
+                    <button class="key letter-key">F</button>
+                    <button class="key letter-key">G</button>
+                    <button class="key letter-key">H</button>
+                    <button class="key letter-key">J</button>
+                    <button class="key letter-key">K</button>
+                    <button class="key letter-key">L</button>
+                    <div class="spacer"></div>
+                </div>
+                <div class="keyrow">
+                    <button class="key key-large" id="enter">ENTER</button>
+                    <button class="key letter-key">Y</button>
+                    <button class="key letter-key">C</button>
+                    <button class="key letter-key">V</button>
+                    <button class="key letter-key">B</button>
+                    <button class="key letter-key">N</button>
+                    <button class="key letter-key">M</button>
+                    <button class="key key-large" id="backspace"><svg xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24" width="24" height="24">
+                            <path fill="none" d="M0 0h24v24H0z" />
+                            <path
+                                d="M6.535 3H21a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H6.535a1 1 0 0 1-.832-.445l-5.333-8a1 1 0 0 1 0-1.11l5.333-8A1 1 0 0 1 6.535 3zm.535 2l-4.666 7 4.666 7H20V5H7.07zM13 10.586l2.828-2.829 1.415 1.415L14.414 12l2.829 2.828-1.415 1.415L13 13.414l-2.828 2.829-1.415-1.415L11.586 12 8.757 9.172l1.415-1.415L13 10.586z"
+                                fill="rgba(255,255,255,1)" />
+                        </svg></button>
+                </div>
+            </section>
+        </main>
+        <aside class="modal" id="stats">
+            <div class="modal-content">
+                <span class="close-btn" id="closeStats">&times;</span>
+                <h2>Statistiken</h2>
+                <section class="statsFigs">
+                    <div class="statsFig"><span class="statsNum" id="statsPlayed"></span><span
+                            class="statsTxt">gespielt</span></div>
+                    <div class="statsFig"><span class="statsNum" id="statsWon"></span><span
+                            class="statsTxt">gewonnen</span></div>
+                    <div class="statsFig"><span class="statsNum" id="StatsCurrStreak"></span><span
+                            class="statsTxt">aktuelle Serie</span></div>
+                    <div class="statsFig"><span class="statsNum" id="StatsMaxStreak"></span><span class="statsTxt">beste
+                            Serie</span></div>
+                </section>
+                <section class="dist" id="dist">
+                    <h3>Verteilung nach Versuchen</h3>
+                </section>
             </div>
-            <div class="keyrow">
-                <button class="key letter-key">A</button>
-                <button class="key letter-key">S</button>
-                <button class="key letter-key">D</button>
-                <button class="key letter-key">F</button>
-                <button class="key letter-key">G</button>
-                <button class="key letter-key">H</button>
-                <button class="key letter-key">J</button>
-                <button class="key letter-key">K</button>
-                <button class="key letter-key">L</button>
+        </aside>
+        <aside class="modal" id="howto">
+            <div class="modal-content instructions">
+                <header>
+                    <span class="close-btn" id="closeHowto">&times;</span>
+                    <h2>Anleitung</h2>
+                </header>
+                <p>Errate das Wort in 6 Versuchen.</p>
+                <p>Gib ein 5-buchstabiges Wort ein und drücke auf Enter, um die Lösung zu überprüfen.</p>
+                <p>nach jedem Zug zeigt dir das Spiel Hinweise an, wie nahe du dem Lösungswort schon bist.</p>
+                <h3>Beispiele</h3>
+                <div>
+                    <div class="instr-letter correct">T</div>
+                    <div class="instr-letter">A</div>
+                    <div class="instr-letter">D</div>
+                    <div class="instr-letter">E</div>
+                    <div class="instr-letter">L</div>
+                </div>
+                <p>Der Buchstabe <b>T</b> ist richtig und an der richtigen Stelle.</p>
+                <div>
+                    <div class="instr-letter">K</div>
+                    <div class="instr-letter">U</div>
+                    <div class="instr-letter contained">N</div>
+                    <div class="instr-letter">D</div>
+                    <div class="instr-letter">E</div>
+                </div>
+                <p>Der Buchstabe <b>N</b> kommt im Wort vor, ist aber noch nicht an der richtigen Stelle.</p>
+                <div>
+                    <div class="instr-letter">M</div>
+                    <div class="instr-letter used">I</div>
+                    <div class="instr-letter">L</div>
+                    <div class="instr-letter">C</div>
+                    <div class="instr-letter">H</div>
+                </div>
+                <p>Der Buchstabe <b>I</b> kommt nicht im Wort vor.</p>
+                <footer id="statsFooter">
+                    <p>Version: <span id="version"></span></p>
+                </footer>
             </div>
-            <div class="keyrow">
-                <button class="key key-large" id="enter">ENTER</button>
-                <button class="key letter-key">Y</button>
-                <button class="key letter-key">C</button>
-                <button class="key letter-key">V</button>
-                <button class="key letter-key">B</button>
-                <button class="key letter-key">N</button>
-                <button class="key letter-key">M</button>
-                <button class="key key-large" id="backspace"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                        width="24" height="24">
-                        <path fill="none" d="M0 0h24v24H0z" />
-                        <path
-                            d="M6.535 3H21a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H6.535a1 1 0 0 1-.832-.445l-5.333-8a1 1 0 0 1 0-1.11l5.333-8A1 1 0 0 1 6.535 3zm.535 2l-4.666 7 4.666 7H20V5H7.07zM13 10.586l2.828-2.829 1.415 1.415L14.414 12l2.829 2.828-1.415 1.415L13 13.414l-2.828 2.829-1.415-1.415L11.586 12 8.757 9.172l1.415-1.415L13 10.586z"
-                            fill="rgba(255,255,255,1)" />
-                    </svg></button>
+        </aside>
+        <aside class="modal" id="settings">
+            <div class="modal-content">
+                <span class="close-btn" id="closeSettings">&times;</span>
+                <h2>Einstellungen</h2>
+                <div>
+                    <h3>Spiel zurücksetzen</h3>
+                    <p>Löscht deinen gesamten Spielfortschritt und alle Statistiken. Kann nicht rückgängig gemacht werden.</p>
+                    <button id="reset">Zurücksetzen</button>
+                </div>
             </div>
-        </section>
+        </aside>
     </div>
 
     <script type="module" src="app.js"></script>

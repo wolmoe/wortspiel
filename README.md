@@ -1,7 +1,12 @@
 # Wortspiel
-Word game inspired by [Wordle](https://www.nytimes.com/games/wordle/index.html) in German language. Built from scratch with Vanilla JS
+Word game inspired by [Wordle](https://www.nytimes.com/games/wordle/index.html) in German language. Built from scratch with Vanilla JS.
 
 ## Changelog
+
+2022.03.28:
+* Implemented statistics functions
+* Implemented instructions and settings
+* Updated word list
 
 2022.02.09:
 * Implemented new word list with better word quality ([http://wftp.tu-chemnitz.de/pub/Local/urz/ding/de-en/], GNU General Public License)
